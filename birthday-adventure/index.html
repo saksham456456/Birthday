@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Journey</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <!-- GSAP for cinematic animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body class="starlit">
+    <div id="loader" class="loader">
+        <div class="loader-content">
+            <span class="loader-text">Preparing your adventure...</span>
+        </div>
+    </div>
+
+    <main id="main-content">
+        <!-- 1. HERO SECTION -->
+        <section id="hero" class="hero">
+            <video id="hero-video" class="bg-video" autoplay muted loop playsinline>
+                <source src="" type="video/mp4">
+            </video>
+            <div class="overlay"></div>
+            <div class="hero-content">
+                <h1 id="hero-title" class="reveal-text">Hey...</h1>
+                <div id="countdown" class="countdown">
+                    <div class="timer-unit">
+                        <span id="days">00</span>
+                        <label>Days</label>
+                    </div>
+                    <div class="timer-unit">
+                        <span id="hours">00</span>
+                        <label>Hours</label>
+                    </div>
+                    <div class="timer-unit">
+                        <span id="minutes">00</span>
+                        <label>Minutes</label>
+                    </div>
+                    <div class="timer-unit">
+                        <span id="seconds">00</span>
+                        <label>Seconds</label>
+                    </div>
+                </div>
+                <button id="begin-btn" class="cta-primary">Begin the Journey</button>
+            </div>
+        </section>
+
+        <!-- 2. INTRO OVERLAY -->
+        <section id="intro" class="section-overlay hidden">
+            <div class="overlay-content">
+                <h2>The Adventure Begins</h2>
+                <p>This isn’t just a birthday website. It’s a small journey — created just for you.</p>
+                <ul class="rules-list">
+                    <li>Complete the challenges</li>
+                    <li>Take your time</li>
+                    <li>The final surprise unlocks at the end</li>
+                </ul>
+                <button id="start-adventure-btn" class="cta-primary">Start Adventure</button>
+                <div class="music-toggle-container">
+                    <button id="music-toggle" class="btn-icon">
+                        <span id="music-icon">🔇</span>
+                    </button>
+                    <span>Ambient Music</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ADVENTURE PATH -->
+        <section id="adventure-path" class="section hidden">
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+                <span id="progress-text">Step 1 of 3</span>
+            </div>
+
+            <!-- Challenge 1: Birthday Code -->
+            <div id="challenge-1" class="challenge-card">
+                <h3>Challenge 1: The Secret Key</h3>
+                <p>Every journey needs a key. Yours is hidden in your special day (DDMM).</p>
+                <div class="input-group">
+                    <input type="text" id="code-input" placeholder="0000" maxlength="4">
+                    <button id="submit-code" class="cta-secondary">Unlock</button>
+                </div>
+                <p id="code-hint" class="hint hidden">Hint: Think about your birth date!</p>
+            </div>
+
+            <!-- Challenge 2: Memory Flip -->
+            <div id="challenge-2" class="challenge-card hidden">
+                <h3>Challenge 2: Echoes of Memory</h3>
+                <p>Match the pairs to clear the mist.</p>
+                <div id="memory-grid" class="memory-grid">
+                    <!-- Dynamic cards -->
+                </div>
+            </div>
+
+            <!-- Challenge 3: Mini Quiz -->
+            <div id="challenge-3" class="challenge-card hidden">
+                <h3>Challenge 3: The Heart's Path</h3>
+                <p>Only those who know you best can pass.</p>
+                <div id="quiz-container">
+                    <h4 id="quiz-question"></h4>
+                    <div id="quiz-options" class="options-grid"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Story Video Interlude -->
+        <section id="story-interlude" class="section-overlay hidden">
+            <div class="overlay-content full-width">
+                <video id="story-video" class="story-video" controls playsinline>
+                    <source src="" type="video/mp4">
+                </video>
+                <div class="video-controls">
+                    <button id="close-story-btn" class="cta-primary hidden">Continue the Journey</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. MEMORY GALLERY -->
+        <section id="gallery" class="section hidden">
+            <div class="container">
+                <h2 class="section-title">Moments That Matter</h2>
+                <div id="gallery-grid" class="gallery-grid">
+                    <!-- Dynamic images -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. WISH WALL -->
+        <section id="wishes" class="section hidden">
+            <div class="container">
+                <h2 class="section-title">From the Heart</h2>
+                <div class="wish-form-container">
+                    <form id="wish-form">
+                        <input type="text" id="wish-name" placeholder="Your Name" required>
+                        <textarea id="wish-message" placeholder="Your Birthday Message..." required></textarea>
+                        <button type="submit" class="cta-secondary">Send Wish</button>
+                    </form>
+                </div>
+                <div id="wishes-grid" class="wishes-grid">
+                    <!-- Dynamic wish cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. FINAL REVEAL -->
+        <section id="reveal" class="section locked hidden">
+            <div class="reveal-content">
+                <h2 id="reveal-title">A Final Surprise...</h2>
+                <div class="reveal-box">
+                    <button id="reveal-btn" class="cta-reveal">Open Your Surprise</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reveal Modal -->
+        <div id="reveal-modal" class="modal hidden">
+            <div class="modal-content">
+                <button class="close-modal">&times;</button>
+                <h2 id="final-message">Happy Birthday! 🎉</h2>
+                <video id="final-video" class="reveal-video" controls playsinline>
+                    <source src="" type="video/mp4">
+                </video>
+                <div id="reveal-link-container" class="hidden">
+                    <a href="" id="external-reveal-link" target="_blank" class="cta-primary">Claim Your Gift</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <audio id="bg-music" loop>
+        <source src="" type="audio/mpeg">
+    </audio>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
