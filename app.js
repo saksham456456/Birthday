@@ -61,17 +61,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const init = () => {
         // Apply Config
         elements.heroTitle.innerText = `Hey ${CONFIG.name}... something special is waiting for you.`;
-        elements.heroVideo.querySelector('source').src = CONFIG.heroVideo;
-        elements.heroVideo.load();
 
-        elements.bgMusic.querySelector('source').src = CONFIG.backgroundMusic;
-        elements.bgMusic.load();
+        // Video Loading - Use direct src on video element for better compatibility
+        if (CONFIG.heroVideo) {
+            elements.heroVideo.src = CONFIG.heroVideo;
+            elements.heroVideo.load();
+        }
 
-        elements.storyVideo.querySelector('source').src = CONFIG.midAdventureVideo;
-        elements.storyVideo.load();
+        if (CONFIG.backgroundMusic) {
+            elements.bgMusic.src = CONFIG.backgroundMusic;
+            elements.bgMusic.load();
+        }
 
-        elements.finalVideo.querySelector('source').src = CONFIG.revealVideo;
-        elements.finalVideo.load();
+        if (CONFIG.midAdventureVideo) {
+            elements.storyVideo.src = CONFIG.midAdventureVideo;
+            elements.storyVideo.load();
+        }
+
+        if (CONFIG.revealVideo) {
+            elements.finalVideo.src = CONFIG.revealVideo;
+            elements.finalVideo.load();
+        }
 
         if (CONFIG.revealLink) {
             const linkContainer = document.getElementById('reveal-link-container');

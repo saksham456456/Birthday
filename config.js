@@ -1,18 +1,13 @@
 const CONFIG = {
   name: "Alex",
-  birthdayDate: "2028-12-31T00:00:00", // Way in the future
+  birthdayDate: "2025-12-31T00:00:00", // Change to recipient's birthday
   theme: "starlit",
 
-  // Assets (Recommended to use local files for production)
-  // Provided video links:
-  // Hero Video: https://drive.google.com/file/d/1gOQSDUQiFAgkDiVzXbv1EXEVnf0qmX5N/view?usp=sharing
-  // Story Video: https://drive.google.com/file/d/1RqQW78Hd1-JDLhx2zCCgcGtDOJyhvhZe/view?usp=sharing
-  // Reveal Video: https://drive.google.com/file/d/1CJA-2zzma4Z76HI8jZl-gt1REJRKHLzw/view?usp=sharing
-
-  heroVideo: "assets/hero.mp4",
-  midAdventureVideo: "assets/story.mp4",
-  revealVideo: "assets/reveal.mp4",
-  backgroundMusic: "assets/music.mp3",
+  // Assets (Direct links to the provided Google Drive videos)
+  heroVideo: "https://drive.google.com/uc?export=download&id=1gOQSDUQiFAgkDiVzXbv1EXEVnf0qmX5N",
+  midAdventureVideo: "https://drive.google.com/uc?export=download&id=1RqQW78Hd1-JDLhx2zCCgcGtDOJyhvhZe",
+  revealVideo: "https://drive.google.com/uc?export=download&id=1CJA-2zzma4Z76HI8jZl-gt1REJRKHLzw",
+  backgroundMusic: "assets/music.mp3", // Place your mp3 in assets folder
 
   quiz: [
     {
@@ -34,11 +29,15 @@ const CONFIG = {
 
   gallery: [
     { url: "assets/gallery/1.jpg", caption: "Adventure awaits" },
-    { url: "assets/gallery/2.jpg", caption: "Memories made" }
+    { url: "assets/gallery/2.jpg", caption: "Memories made" },
+    { url: "assets/gallery/3.jpg", caption: "Laughs shared" },
+    { url: "assets/gallery/4.jpg", caption: "The journey so far" },
+    { url: "assets/gallery/5.jpg", caption: "Golden moments" },
+    { url: "assets/gallery/6.jpg", caption: "To many more" }
   ],
 
   revealLink: "https://example.com/gift",
-  unlockTime: "2028-12-31T00:00:00"
+  unlockTime: "2025-12-31T00:00:00"
 };
 
 window.CONFIG = CONFIG;
