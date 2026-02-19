@@ -54,12 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
         revealBtn: document.getElementById('reveal-btn'),
         revealModal: document.getElementById('reveal-modal'),
         finalVideo: document.getElementById('final-video'),
-        closeModal: document.querySelector('.close-modal')
+        closeModal: document.querySelector('.close-modal'),
+
+        heroFallback: document.getElementById('hero-fallback'),
+        storyFallback: document.getElementById('story-video-fallback'),
+        finalFallback: document.getElementById('final-video-fallback')
     };
 
     // 3. INITIALIZATION
     const init = () => {
         // Apply Config
+        document.body.dataset.theme = CONFIG.theme || 'starlit';
         elements.heroTitle.innerText = `Hey ${CONFIG.name}... something special is waiting for you.`;
 
         // Video Loading - Use direct src on video element for better compatibility
@@ -83,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.finalVideo.load();
         }
 
+        setupVideoErrorHandling();
+
         if (CONFIG.revealLink) {
             const linkContainer = document.getElementById('reveal-link-container');
             const link = document.getElementById('external-reveal-link');
@@ -102,7 +109,81 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500);
     };
 
-    // 4. ANIMATIONS (GSAP)
+    // 4. VIDEO ERROR HANDLING
+    const setupVideoErrorHandling = () => {
+        const handleVideoError = (videoEl, fallbackEl) => {
+            console.warn(`Video failed to load: ${videoEl.id}. Switching to fallback.`);
+            videoEl.classList.add('hidden');
+            fallbackEl.classList.remove('hidden');
+
+            // Set fallback image if available
+            const img = fallbackEl.querySelector('img');
+            if (img) img.src = CONFIG.heroImage;
+            if (videoEl.id === 'hero-video') {
+                fallbackEl.style.backgroundImage = `url(${CONFIG.heroImage})`;
+            }
+        };
+
+        const videos = [
+            { video: elements.heroVideo, fallback: elements.heroFallback },
+            { video: elements.storyVideo, fallback: elements.storyFallback },
+            { video: elements.finalVideo, fallback: elements.finalFallback }
+        ];
+
+        videos.forEach(({ video, fallback }) => {
+            video.addEventListener('error', () => handleVideoError(video, fallback));
+            video.addEventListener('stalled', () => {
+                // If stalled for too long, maybe consider it an error?
+                // For now just log it.
+                console.log(`Video stalled: ${video.id}`);
+            });
+        });
+    };
+
+    // 5. ANIMATIONS (GSAP)
+    const setupScrollAnimations = () => {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        const sections = ['#adventure-path', '#gallery', '#wishes', '#reveal'];
+        sections.forEach(selector => {
+            const section = document.querySelector(selector);
+            if (!section) return;
+
+            // Animate title
+            const title = section.querySelector('h2, h3');
+            if (title) {
+                gsap.from(title, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                    },
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    ease: "power3.out"
+                });
+            }
+
+            // Animate content blocks
+            const content = section.querySelector('.container, .challenge-card, .reveal-content');
+            if (content) {
+                gsap.from(content, {
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 70%",
+                    },
+                    opacity: 0,
+                    y: 30,
+                    duration: 1.2,
+                    delay: 0.2,
+                    ease: "power2.out"
+                });
+            }
+        });
+    };
+
     const animateHeroEntrances = () => {
         gsap.from(".reveal-text", {
             duration: 1.5,
@@ -273,6 +354,14 @@ document.addEventListener('DOMContentLoaded', () => {
             card.classList.add('memory-card');
             card.dataset.icon = icon;
             card.dataset.index = index;
+
+            card.innerHTML = `
+                <div class="memory-card-inner">
+                    <div class="memory-card-front">?</div>
+                    <div class="memory-card-back">${icon}</div>
+                </div>
+            `;
+
             card.addEventListener('click', onCardClick);
             elements.memoryGrid.appendChild(card);
         });
@@ -281,11 +370,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function onCardClick() {
         if (state.memoryFlipped.length < 2 && !this.classList.contains('flipped')) {
             this.classList.add('flipped');
-            this.innerText = this.dataset.icon;
             state.memoryFlipped.push(this);
 
+            // GSAP Flip Animation
+            gsap.to(this.querySelector('.memory-card-inner'), {
+                rotationY: 180,
+                duration: 0.6,
+                ease: "power2.inOut"
+            });
+
             if (state.memoryFlipped.length === 2) {
-                setTimeout(checkMemoryMatch, 600);
+                setTimeout(checkMemoryMatch, 800);
             }
         }
     }
@@ -299,9 +394,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             c1.classList.remove('flipped');
-            c1.innerText = '';
             c2.classList.remove('flipped');
-            c2.innerText = '';
+
+            gsap.to([c1.querySelector('.memory-card-inner'), c2.querySelector('.memory-card-inner')], {
+                rotationY: 0,
+                duration: 0.6,
+                ease: "power2.inOut"
+            });
         }
         state.memoryFlipped = [];
     }
@@ -389,16 +488,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 9. GALLERY & WISHES
     const renderGallery = () => {
+        elements.galleryGrid.innerHTML = '';
         CONFIG.gallery.forEach(item => {
             const img = document.createElement('img');
             img.src = item.url;
             img.alt = item.caption;
+            img.classList.add('gallery-item');
             img.loading = 'lazy';
             img.onclick = () => {
                 // simple lightbox
                 window.open(item.url, '_blank');
             };
             elements.galleryGrid.appendChild(img);
+        });
+
+        gsap.from(".gallery-item", {
+            duration: 0.8,
+            opacity: 0,
+            y: 30,
+            stagger: 0.1,
+            ease: "power2.out",
+            scrollTrigger: {
+                trigger: "#gallery",
+                start: "top 80%"
+            }
         });
     };
 
@@ -419,6 +532,20 @@ document.addEventListener('DOMContentLoaded', () => {
             card.appendChild(message);
             elements.wishesGrid.appendChild(card);
         });
+
+        if (saved.length > 0) {
+            gsap.from(".wish-card", {
+                duration: 0.8,
+                opacity: 0,
+                scale: 0.9,
+                stagger: 0.1,
+                ease: "back.out(1.7)",
+                scrollTrigger: {
+                    trigger: "#wishes",
+                    start: "top 80%"
+                }
+            });
+        }
     };
 
     elements.wishForm.onsubmit = (e) => {
@@ -442,4 +569,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize
     init();
+    setupScrollAnimations();
 });

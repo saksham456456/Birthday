@@ -2,6 +2,7 @@ const CONFIG = {
   name: "Alex",
   birthdayDate: "2025-12-31T00:00:00", // Change to recipient's birthday
   theme: "starlit",
+  heroImage: "assets/hero.jpg", // Fallback if video fails
 
   // Assets (Direct links to the provided Google Drive videos)
   heroVideo: "https://drive.google.com/uc?export=download&id=1gOQSDUQiFAgkDiVzXbv1EXEVnf0qmX5N",

@@ -26,6 +26,7 @@
         <!-- 1. HERO SECTION -->
         <section id="hero" class="hero">
             <video id="hero-video" class="bg-video" autoplay muted loop playsinline></video>
+            <div id="hero-fallback" class="bg-image hidden"></div>
             <div class="overlay"></div>
             <div class="hero-content">
                 <h1 id="hero-title" class="reveal-text">Hey...</h1>
@@ -115,6 +116,9 @@
         <section id="story-interlude" class="section-overlay hidden">
             <div class="overlay-content full-width">
                 <video id="story-video" class="story-video" controls playsinline></video>
+                <div id="story-video-fallback" class="video-fallback hidden">
+                    <img src="" alt="Story moment">
+                </div>
                 <div class="video-controls">
                     <button id="close-story-btn" class="cta-primary hidden">Continue the Journey</button>
                 </div>
@@ -164,6 +168,9 @@
                 <button class="close-modal">&times;</button>
                 <h2 id="final-message">Happy Birthday! 🎉</h2>
                 <video id="final-video" class="reveal-video" controls playsinline></video>
+                <div id="final-video-fallback" class="video-fallback hidden">
+                    <img src="" alt="Celebration">
+                </div>
                 <div id="reveal-link-container" class="hidden">
                     <a href="" id="external-reveal-link" target="_blank" class="cta-primary">Claim Your Gift</a>
                 </div>
