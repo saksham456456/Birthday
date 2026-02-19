@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Letter Chamber | The Birthday Universe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+</head>
+<body>
+    <div class="preloader"><div class="loader-star"></div></div>
+    <div class="cursor-light"></div>
+
+    <main class="letter-chamber container">
+        <header class="page-header">
+            <h2 class="title-large gold-text">THE LETTER CHAMBER</h2>
+            <p class="subtitle">Words from the soul.</p>
+        </header>
+
+        <section class="letter-container">
+            <div class="letter-paper">
+                <div id="typewriter-text" class="letter-content"></div>
+                <div id="signature" class="signature hidden">Forever, <br> Me</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Navigation -->
+    <div class="nav-orb" id="nav-orb-btn"><div class="orb-inner"></div></div>
+    <nav class="nav-menu" id="main-nav">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="timeline.html" class="nav-item">Timeline</a>
+        <a href="memories.html" class="nav-item">Memories</a>
+        <a href="challenges.html" class="nav-item">Challenges</a>
+        <a href="letter.html" class="nav-item">Letter</a>
+        <a href="wishes.html" class="nav-item">Wishes</a>
+        <a href="finale.html" class="nav-item">Finale</a>
+    </nav>
+
+    <div class="page-transition"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(TextPlugin);
+
+            const text = CONFIG.letterText;
+            const target = document.getElementById('typewriter-text');
+
+            // Start Typewriter after a delay
+            setTimeout(() => {
+                gsap.to(target, {
+                    duration: text.length * 0.03,
+                    text: text,
+                    ease: "none",
+                    onComplete: () => {
+                        document.getElementById('signature').classList.remove('hidden');
+                        gsap.from('#signature', { opacity: 0, y: 10, duration: 1 });
+                    }
+                });
+            }, 1500);
+        });
+    </script>
+    <style>
+        .letter-chamber { padding-top: 150px; padding-bottom: 100px; }
+        .page-header { text-align: center; margin-bottom: 60px; }
+        .subtitle { letter-spacing: 5px; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; }
+
+        .letter-container {
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .letter-paper {
+            background: #fff9f0;
+            color: #2c3e50;
+            width: 100%;
+            max-width: 800px;
+            min-height: 600px;
+            padding: 60px;
+            border-radius: 5px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5), inset 0 0 100px rgba(0,0,0,0.05);
+            font-family: var(--font-script);
+            font-size: 1.8rem;
+            line-height: 1.6;
+            position: relative;
+            transform: rotateX(5deg);
+        }
+
+        .letter-paper::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .letter-content {
+            white-space: pre-wrap;
+        }
+
+        .signature {
+            margin-top: 50px;
+            text-align: right;
+            font-size: 2.2rem;
+            color: #8b4513;
+        }
+
+        @media (max-width: 768px) {
+            .letter-paper { padding: 30px; font-size: 1.4rem; }
+        }
+    </style>
+</body>
+</html>

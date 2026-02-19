@@ -1,0 +1,216 @@
+:root {
+    --bg-midnight: #050510;
+    --bg-dark: #0a0a1a;
+    --purple-glow: #8a2be2;
+    --gold: #d4af37;
+    --text-light: #f0f0f0;
+    --text-muted: #b0b0b0;
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-script: 'Dancing Script', cursive;
+
+    --transition-slow: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-cinematic: 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-midnight);
+    color: var(--text-light);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Cinematic Grain Overlay */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Noise_Texture.png');
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Typography */
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+}
+
+.title-large {
+    font-size: clamp(3rem, 10vw, 6rem);
+    line-height: 1.1;
+    color: white;
+}
+
+.gold-text {
+    color: var(--gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+/* Glassmorphism */
+.glass-panel {
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 40px;
+}
+
+/* Floating Orb Navigation */
+.nav-orb {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle at 30% 30%, var(--purple-glow), #000);
+    border-radius: 50%;
+    box-shadow: 0 0 30px var(--purple-glow);
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s ease;
+}
+
+.nav-orb:hover {
+    transform: scale(1.1) rotate(90deg);
+}
+
+.nav-menu {
+    position: fixed;
+    bottom: 110px;
+    right: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition-slow);
+    z-index: 999;
+}
+
+.nav-menu.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.nav-item {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    border: 1px solid var(--glass-border);
+    padding: 10px 25px;
+    border-radius: 30px;
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-item:hover {
+    background: var(--purple-glow);
+    box-shadow: 0 0 15px var(--purple-glow);
+    transform: translateX(-10px);
+}
+
+/* Page Transitions */
+.page-transition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-midnight);
+    z-index: 2000;
+    transform: translateY(100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Custom Cursor Light */
+.cursor-light {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, transparent 70%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+}
+
+/* Preloader */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-midnight);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.loader-star {
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 20px white, 0 0 40px var(--gold);
+    animation: loaderPulse 2s infinite ease-in-out;
+}
+
+@keyframes loaderPulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(3); opacity: 1; }
+}
+
+/* Hide content until loaded */
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Responsive Grid */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+.star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .container { padding: 0 20px; }
+    .title-large { font-size: 3rem; }
+    .nav-orb { bottom: 20px; right: 20px; }
+    .nav-menu { bottom: 90px; right: 20px; }
+}

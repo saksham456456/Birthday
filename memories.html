@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Vault | The Birthday Universe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <div class="preloader"><div class="loader-star"></div></div>
+    <div class="cursor-light"></div>
+
+    <main class="memory-vault">
+        <header class="page-header container">
+            <h2 class="title-large gold-text">THE MEMORY VAULT</h2>
+            <p class="subtitle">Etched in the fabric of time.</p>
+        </header>
+
+        <section class="gallery-container container">
+            <div id="masonry-grid" class="masonry-grid">
+                <!-- Gallery items injected here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Fullscreen Viewer -->
+    <div id="cinematic-viewer" class="cinematic-viewer">
+        <button class="close-viewer">&times;</button>
+        <div class="viewer-content">
+            <img id="viewer-img" src="" alt="">
+            <p id="viewer-caption"></p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-orb" id="nav-orb-btn"><div class="orb-inner"></div></div>
+    <nav class="nav-menu" id="main-nav">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="timeline.html" class="nav-item">Timeline</a>
+        <a href="memories.html" class="nav-item">Memories</a>
+        <a href="challenges.html" class="nav-item">Challenges</a>
+        <a href="letter.html" class="nav-item">Letter</a>
+        <a href="wishes.html" class="nav-item">Wishes</a>
+        <a href="finale.html" class="nav-item">Finale</a>
+    </nav>
+
+    <div class="page-transition"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('masonry-grid');
+            const viewer = document.getElementById('cinematic-viewer');
+            const viewerImg = document.getElementById('viewer-img');
+            const viewerCaption = document.getElementById('viewer-caption');
+            const closeBtn = document.querySelector('.close-viewer');
+
+            CONFIG.gallery.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = 'gallery-item';
+                el.innerHTML = `
+                    <div class="image-wrapper">
+                        <img src="${item.url}" alt="${item.caption}" loading="lazy">
+                        <div class="image-overlay">
+                            <span>${item.caption}</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(el);
+
+                el.addEventListener('click', () => {
+                    viewerImg.src = item.url;
+                    viewerCaption.innerText = item.caption;
+                    viewer.classList.add('active');
+                    gsap.from(".viewer-content", { scale: 0.9, opacity: 0, duration: 0.8, ease: "power2.out" });
+                });
+
+                // Scroll Animation
+                gsap.from(el, {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 85%",
+                    },
+                    opacity: 0,
+                    y: 30,
+                    duration: 1,
+                    delay: (index % 3) * 0.2
+                });
+            });
+
+            closeBtn.addEventListener('click', () => {
+                viewer.classList.remove('active');
+            });
+        });
+    </script>
+    <style>
+        .memory-vault { padding-top: 150px; padding-bottom: 100px; }
+        .page-header { text-align: center; margin-bottom: 80px; }
+        .subtitle { letter-spacing: 5px; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; }
+
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+
+        .gallery-item {
+            cursor: pointer;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 125%; /* 4:5 aspect ratio */
+        }
+
+        .image-wrapper img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 1s var(--transition-cinematic);
+        }
+
+        .gallery-item:hover img { transform: scale(1.1); filter: brightness(0.7); }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            opacity: 0;
+            transition: 0.5s;
+        }
+
+        .gallery-item:hover .image-overlay { opacity: 1; }
+
+        /* Cinematic Viewer */
+        .cinematic-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.5s;
+        }
+
+        .cinematic-viewer.active { opacity: 1; pointer-events: all; }
+
+        .viewer-content { max-width: 90%; max-height: 90%; text-align: center; }
+        .viewer-content img { max-width: 100%; max-height: 80vh; border-radius: 10px; }
+        .viewer-content p { margin-top: 20px; font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); }
+
+        .close-viewer {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .masonry-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</body>
+</html>

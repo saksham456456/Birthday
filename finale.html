@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Final Reveal | The Birthday Universe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="preloader"><div class="loader-star"></div></div>
+    <div class="cursor-light"></div>
+
+    <main class="finale-reveal">
+        <section id="climax-trigger" class="climax-trigger active">
+            <h3 id="heartbeat-text">One last surprise...</h3>
+            <div class="heartbeat-circle"></div>
+        </section>
+
+        <section id="final-moment" class="final-moment hidden">
+            <div class="reveal-video-container">
+                <video id="reveal-video" playsinline controls></video>
+                <div id="video-fallback" class="video-fallback hidden">
+                    <h1 class="title-large gold-text">HAPPY BIRTHDAY!</h1>
+                </div>
+            </div>
+            <h2 id="final-message" class="title-large gold-text" style="margin-top: 50px;"></h2>
+        </section>
+    </main>
+
+    <!-- Navigation -->
+    <div class="nav-orb" id="nav-orb-btn"><div class="orb-inner"></div></div>
+    <nav class="nav-menu" id="main-nav">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="timeline.html" class="nav-item">Timeline</a>
+        <a href="memories.html" class="nav-item">Memories</a>
+        <a href="challenges.html" class="nav-item">Challenges</a>
+        <a href="letter.html" class="nav-item">Letter</a>
+        <a href="wishes.html" class="nav-item">Wishes</a>
+        <a href="finale.html" class="nav-item">Finale</a>
+    </nav>
+
+    <div class="page-transition"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const trigger = document.getElementById('climax-trigger');
+            const moment = document.getElementById('final-moment');
+            const video = document.getElementById('reveal-video');
+            const fallback = document.getElementById('video-fallback');
+            const message = document.getElementById('final-message');
+
+            trigger.addEventListener('click', () => {
+                // Heartbeat effect
+                gsap.to(".heartbeat-circle", { scale: 50, opacity: 0, duration: 2, ease: "power4.in", onComplete: () => {
+                    trigger.classList.remove('active');
+                    moment.classList.remove('hidden');
+                    startFinale();
+                }});
+                gsap.to("#heartbeat-text", { opacity: 0, duration: 1 });
+            });
+
+            function startFinale() {
+                message.innerText = CONFIG.finaleMessage;
+
+                // Try playing video
+                video.src = CONFIG.revealVideo;
+                video.play().catch(e => {
+                    console.warn("Video failed, showing fallback");
+                    video.classList.add('hidden');
+                    fallback.classList.remove('hidden');
+                });
+
+                // Confetti Rain
+                const duration = 15 * 1000;
+                const animationEnd = Date.now() + duration;
+                const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                function randomInRange(min, max) {
+                  return Math.random() * (max - min) + min;
+                }
+
+                const interval = setInterval(function() {
+                  const timeLeft = animationEnd - Date.now();
+
+                  if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                  }
+
+                  const particleCount = 50 * (timeLeft / duration);
+                  confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                  confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+
+                gsap.from(moment, { opacity: 0, duration: 2 });
+            }
+        });
+    </script>
+    <style>
+        .finale-reveal { height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; }
+
+        .climax-trigger { cursor: pointer; }
+        .climax-trigger h3 { font-family: var(--font-display); font-size: 2rem; color: var(--text-muted); }
+        .heartbeat-circle {
+            width: 100px; height: 100px; background: var(--purple-glow);
+            border-radius: 50%; margin: 40px auto;
+            box-shadow: 0 0 50px var(--purple-glow);
+            animation: heartbeat 1s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+        }
+
+        .reveal-video-container { max-width: 800px; width: 90%; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        video { width: 100%; display: block; }
+
+        .hidden { display: none; }
+    </style>
+</body>
+</html>

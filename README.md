@@ -1,55 +1,47 @@
-# Birthday Adventure Website
+# 🌌 The Birthday Universe Ecosystem
 
-A high-end, interactive, cinematic birthday micro-experience designed to be emotional, surprising, and premium.
+A high-end, cinematic, multi-page interactive adventure built for one special person.
 
-## ✨ Features
-- **Cinematic Hero**: Full-screen video background with a live countdown.
-- **Story-Driven**: Guided journey with interactive challenges.
-- **Interactive Challenges**:
-  - Birthday Code Unlock (DDMM)
-  - Memory Match Game
-  - Personal Quiz
-- **Story Interlude**: Cinematic video break between challenges.
-- **Memory Gallery**: Beautifully animated grid of photos/videos.
-- **Guest Wishes Wall**: Persistent messages from loved ones.
-- **Final Grand Reveal**: Confetti, music, and the ultimate birthday surprise.
+## 🚀 The Architecture
+This is not a single landing page. It is a **7-page immersive ecosystem**:
+1.  **Portal (`index.html`)**: The entry point. A starlit gateway.
+2.  **Timeline Galaxy (`timeline.html`)**: A vertical journey through time using GSAP ScrollTrigger.
+3.  **Memory Vault (`memories.html`)**: A 3D-feeling gallery of moments.
+4.  **Challenge Realm (`challenges.html`)**: Interactive puzzles (Secret Date Code & Quiz).
+5.  **Letter Chamber (`letter.html`)**: A cinematic typewriter-effect emotional message.
+6.  **Wishes from Stars (`wishes.html`)**: A community wall with persistent storage.
+7.  **Final Reveal (`finale.html`)**: The grand payoff with confetti and a final video.
 
-## ⚙️ Customization
-Personalizing the website is easy. Open `config.js` and update the following:
+## ⚙️ Configuration
+All personalization is handled in `js/config.js`. Change the name, dates, and assets there to reuse the entire universe.
 
-```javascript
-const CONFIG = {
-  name: "Alex",
-  birthdayDate: "2025-12-31T00:00:00",
-  theme: "starlit",
+## 🎬 The "Video Hack" (For Google Drive)
+Google Drive links often break in `<video>` tags because of virus-scan warnings for large files.
 
-  // Assets (Place in assets/ folder)
-  heroVideo: "assets/hero.mp4",
-  midAdventureVideo: "assets/story.mp4",
-  revealVideo: "assets/reveal.mp4",
-  backgroundMusic: "assets/music.mp3",
+**The Best Hack for Production:**
+1.  **Don't use Google Drive for streaming.**
+2.  **The GitHub Hack (Recommended):**
+    - Upload your videos (`hero.mp4`, etc.) to a public GitHub repository.
+    - Use the URL format: `https://github.com/USERNAME/REPO/raw/main/assets/video.mp4`
+    - This serves the raw file directly and is extremely reliable for static sites.
+3.  **The Cloudinary Hack:**
+    - Upload to Cloudinary (Free).
+    - Use their "Optimized" delivery URL.
 
-  // Quiz Questions
-  quiz: [...],
-
-  // Gallery Images
-  gallery: [...],
-
-  // Final Reveal Link
-  revealLink: "https://example.com/gift"
-};
-```
-
-## 🚀 Deployment
-1. Add your assets to the `assets/` folder.
-2. Update `config.js` with the recipient's details.
-3. Deploy to any static host (Vercel, Netlify, GitHub Pages).
-
-## 🎨 Design System
-The site uses CSS variables for easy theming. Change colors in `styles.css` under the `:root` selector.
+If you *must* use Google Drive, use this format for smaller files:
+`https://drive.google.com/uc?export=download&id=YOUR_FILE_ID`
 
 ## 🛠 Tech Stack
-- Vanilla JavaScript
-- CSS3 (Flexbox/Grid/Variables)
-- GSAP (Animations)
-- Canvas-Confetti
+- **Engine**: Vanilla JavaScript (ES6+)
+- **Animation**: GSAP (GreenSock) + ScrollTrigger
+- **Styling**: Modern CSS (Glassmorphism, Flex/Grid)
+- **Icons**: FontAwesome (included via CDN)
+- **Deployment**: Optimized for Vercel, Netlify, or GitHub Pages.
+
+## 🔒 Security & Performance
+- All user input (Wishes) is sanitized using `textContent` to prevent XSS.
+- Video fallback system: If a video fails to load, a beautiful image fallback is automatically applied from the config.
+- Mobile-first responsive design.
+
+---
+*Created with care for an unforgettable birthday experience.*

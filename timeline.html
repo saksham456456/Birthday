@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Timeline Galaxy | The Birthday Universe</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+    <div class="preloader"><div class="loader-star"></div></div>
+    <div class="cursor-light"></div>
+
+    <main class="timeline-galaxy">
+        <div class="cosmic-bg"></div>
+
+        <header class="page-header container">
+            <h2 class="title-large gold-text">THE TIMELINE GALAXY</h2>
+            <p class="subtitle">A journey through your light.</p>
+        </header>
+
+        <section class="timeline-container container" id="timeline-list">
+            <!-- Timeline items injected here -->
+        </section>
+    </main>
+
+    <!-- Navigation -->
+    <div class="nav-orb" id="nav-orb-btn"><div class="orb-inner"></div></div>
+    <nav class="nav-menu" id="main-nav">
+        <a href="index.html" class="nav-item">Home</a>
+        <a href="timeline.html" class="nav-item">Timeline</a>
+        <a href="memories.html" class="nav-item">Memories</a>
+        <a href="challenges.html" class="nav-item">Challenges</a>
+        <a href="letter.html" class="nav-item">Letter</a>
+        <a href="wishes.html" class="nav-item">Wishes</a>
+        <a href="finale.html" class="nav-item">Finale</a>
+    </nav>
+
+    <div class="page-transition"></div>
+
+    <script src="js/config.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        document.addEventListener('DOMContentLoaded', () => {
+            const list = document.getElementById('timeline-list');
+
+            CONFIG.timeline.forEach((item, index) => {
+                const el = document.createElement('div');
+                el.className = `timeline-item ${index % 2 === 0 ? 'left' : 'right'}`;
+                el.innerHTML = `
+                    <div class="glass-panel timeline-card">
+                        <span class="year gold-text">${item.year}</span>
+                        <h3>${item.title}</h3>
+                        <p class="category">${item.category}</p>
+                        <p class="desc">${item.description}</p>
+                    </div>
+                `;
+                list.appendChild(el);
+
+                // Scroll Animation
+                gsap.from(el.querySelector('.timeline-card'), {
+                    scrollTrigger: {
+                        trigger: el,
+                        start: "top 80%",
+                    },
+                    opacity: 0,
+                    x: index % 2 === 0 ? -100 : 100,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            });
+
+            // Parallax Background
+            gsap.to(".cosmic-bg", {
+                y: "-20%",
+                scrollTrigger: {
+                    trigger: "body",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1
+                }
+            });
+        });
+    </script>
+    <style>
+        .timeline-galaxy {
+            padding-top: 150px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            position: relative;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            background: linear-gradient(to bottom, #050510, #0a0a20, #050510);
+            z-index: -2;
+            background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px);
+            background-size: 550px 550px;
+        }
+        .page-header { margin-bottom: 100px; text-align: center; }
+        .subtitle { letter-spacing: 5px; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; }
+
+        .timeline-container { position: relative; }
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+        }
+
+        .timeline-item {
+            width: 100%;
+            margin-bottom: 100px;
+            display: flex;
+            justify-content: center;
+        }
+        .timeline-card {
+            width: 45%;
+            position: relative;
+            transition: 0.5s;
+        }
+        .timeline-item.left { justify-content: flex-start; }
+        .timeline-item.right { justify-content: flex-end; }
+
+        .year { font-size: 2rem; display: block; margin-bottom: 10px; font-family: var(--font-display); }
+        .category { font-size: 0.8rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .desc { line-height: 1.8; color: var(--text-muted); }
+
+        @media (max-width: 768px) {
+            .timeline-container::before { left: 20px; }
+            .timeline-card { width: 100%; padding-left: 50px; }
+            .timeline-item.left, .timeline-item.right { justify-content: flex-start; }
+        }
+    </style>
+</body>
+</html>
